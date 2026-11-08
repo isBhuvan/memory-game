@@ -91,7 +91,7 @@ function buildBoard() {
     tile.className = 'tile';
     tile.innerHTML =
       '<span class="tile__inner">' +
-      '<span class="tile__face tile__face--front" aria-hidden="true">?</span>' +
+      '<span class="tile__face tile__face--front" aria-hidden="true"></span>' +
       `<span class="tile__face tile__face--back" aria-hidden="true">${card.emoji}</span>` +
       '</span>';
     tile.addEventListener('click', () => onFlip(i));

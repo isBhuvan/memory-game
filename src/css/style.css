@@ -277,10 +277,6 @@ h1 {
 
 .tile__face--front {
   background: linear-gradient(135deg, var(--tile-back), var(--tile-back-2));
-  color: #fff;
-  font-family: var(--font-mark);
-  font-weight: 600;
-  font-size: clamp(1.5rem, 9vw, 2.25rem);
 }
 
 .tile__face--back {
