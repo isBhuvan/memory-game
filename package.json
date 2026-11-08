@@ -1,0 +1,16 @@
+{
+  "name": "memory-game",
+  "version": "1.0.0",
+  "description": "A flip-the-tiles memory match game for kids, with levels, a timer and best-score tracking.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "author": "isbhuvan",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "python3 -m http.server 8080 --directory src",
+    "test": "node --test test/*.test.js"
+  }
+}
