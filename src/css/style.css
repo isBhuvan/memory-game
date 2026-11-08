@@ -1,0 +1,425 @@
+:root {
+  color-scheme: light;
+
+  --accent: #4f46e5;
+  --on-accent: #ffffff;
+  --bg: #f4f5fb;
+  --surface: #ffffff;
+  --cell-bg: #eef0f8;
+  --cell-hover: #e3e6f4;
+  --text: #1c1e2e;
+  --muted: #666b85;
+  --tile-back: #4f46e5;
+  --tile-back-2: #7c75f0;
+  --match-bg: #d7f5e3;
+  --wrong-bg: #fde0e8;
+  --focus: #0ea5e9;
+
+  --font-mark: 'Fredoka', ui-rounded, 'Arial Rounded MT Bold', system-ui, sans-serif;
+
+  --gap: 0.6rem;
+  --radius: 1rem;
+  --board-max: 28rem;
+  --shadow: 0 0.5rem 1.5rem rgb(30 32 60 / 0.12);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --accent: #8b8cff;
+  --on-accent: #12132a;
+  --bg: #0f1020;
+  --surface: #1a1c33;
+  --cell-bg: #25284a;
+  --cell-hover: #2f3360;
+  --text: #eceefb;
+  --muted: #9aa0c4;
+  --tile-back: #5a5cd6;
+  --tile-back-2: #8b8cff;
+  --match-bg: #14452f;
+  --wrong-bg: #5a2238;
+  --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --accent: #8b8cff;
+    --on-accent: #12132a;
+    --bg: #0f1020;
+    --surface: #1a1c33;
+    --cell-bg: #25284a;
+    --cell-hover: #2f3360;
+    --text: #eceefb;
+    --muted: #9aa0c4;
+    --tile-back: #5a5cd6;
+    --tile-back-2: #8b8cff;
+    --match-bg: #14452f;
+    --wrong-bg: #5a2238;
+    --shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.4);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.app {
+  width: 100%;
+  max-width: var(--board-max);
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface);
+  border-radius: calc(var(--radius) * 1.5);
+  box-shadow: var(--shadow);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.app-header h1 {
+  flex: 1;
+  text-align: center;
+}
+
+/* Balances the toggle so the title stays centred. */
+.app-header::before {
+  content: '';
+  flex: none;
+  width: 2.75rem;
+}
+
+.theme-toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cell-bg);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s var(--ease), background-color 0.2s var(--ease);
+}
+
+.theme-toggle:active { transform: scale(0.9); }
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover { background: var(--cell-hover); }
+}
+
+/* ---------- Levels ---------- */
+
+.levels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.level {
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--cell-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s var(--ease), background-color 0.2s var(--ease);
+}
+
+.level[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.level:active { transform: scale(0.96); }
+
+@media (hover: hover) and (pointer: fine) {
+  .level[aria-pressed='false']:hover { background: var(--cell-hover); }
+}
+
+/* ---------- Scoreboard ---------- */
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 0;
+  text-align: center;
+}
+
+.scoreboard div {
+  padding: 0.4rem;
+  border-radius: 0.6rem;
+  background: var(--cell-bg);
+}
+
+.scoreboard dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.scoreboard dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  margin: 0;
+  min-height: 1.5em;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* ---------- Board ---------- */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  gap: var(--gap);
+  width: 100%;
+}
+
+.board[data-locked] { pointer-events: none; }
+
+.tile {
+  appearance: none;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  perspective: 600px;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.15s var(--ease);
+}
+
+.tile:disabled { cursor: default; }
+.tile:active:not(:disabled) { transform: scale(0.94); }
+
+.tile:focus-visible,
+.reset:focus-visible,
+.level:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.tile__inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.4s var(--ease);
+}
+
+.tile[data-state='open'] .tile__inner,
+.tile[data-state='matched'] .tile__inner {
+  transform: rotateY(180deg);
+}
+
+.tile__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.tile__face--front {
+  background: linear-gradient(135deg, var(--tile-back), var(--tile-back-2));
+  color: #fff;
+  font-family: var(--font-mark);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 9vw, 2.25rem);
+}
+
+.tile__face--back {
+  transform: rotateY(180deg);
+  background: var(--cell-bg);
+  font-size: clamp(1.75rem, 11vw, 3rem);
+  line-height: 1;
+}
+
+.tile[data-state='matched'] .tile__face--back {
+  background: var(--match-bg);
+  animation: pop 0.4s var(--ease);
+}
+
+.tile.is-wrong .tile__face--back {
+  background: var(--wrong-bg);
+  animation: shake 0.4s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile[data-state='closed']:hover { transform: translateY(-2px); }
+}
+
+/* ---------- Buttons ---------- */
+
+.actions {
+  display: grid;
+}
+
+.reset {
+  padding: 0.85rem 1rem;
+  min-height: 2.75rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s var(--ease), filter 0.2s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .reset:hover { filter: brightness(1.1); }
+}
+
+.reset:active { transform: scale(0.97); }
+
+/* ---------- Win dialog ---------- */
+
+.dialog {
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--radius) * 1.5);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  overflow: visible;
+}
+
+.dialog::backdrop { background: rgb(15 16 32 / 0.55); }
+
+.dialog__card {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.dialog__card .reset { width: 100%; }
+
+.dialog__badge {
+  font-size: 4rem;
+  line-height: 1;
+  animation: bounce 1s var(--ease) infinite;
+}
+
+.dialog__title {
+  margin: 0;
+  font-family: var(--font-mark);
+  font-size: 1.6rem;
+}
+
+.dialog__summary {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- Confetti ---------- */
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.confetti__piece {
+  position: absolute;
+  top: -1rem;
+  width: 0.6rem;
+  height: 1rem;
+  border-radius: 2px;
+  animation: confetti-fall var(--dur, 2.5s) cubic-bezier(0.3, 0.6, 0.5, 1) var(--delay, 0s) forwards;
+}
+
+@keyframes confetti-fall {
+  to {
+    transform: translate3d(var(--drift, 0), 110vh, 0) rotate(var(--spin, 720deg));
+    opacity: 0.9;
+  }
+}
+
+@keyframes pop {
+  50% { transform: rotateY(180deg) scale(1.12); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  25%      { transform: rotateY(180deg) translateX(-6px); }
+  75%      { transform: rotateY(180deg) translateX(6px); }
+}
+
+@keyframes bounce {
+  50% { transform: translateY(-0.5rem) rotate(6deg); }
+}
+
+@media (max-width: 360px) {
+  :root { --gap: 0.4rem; --radius: 0.75rem; }
+  .app { padding: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
